@@ -57,14 +57,19 @@
 \setbeamertemplate{caption}{\raggedright\insertcaption\par}
 %\captionsetup{font=scriptsize,labelfont=scriptsize}
 %\usefonttheme[stillsansseriflarge]{serif}
-\title{Computer Modeling of Biointerfacial Phenomena via Atomsitic Molecular Dynamics and Free Energy Computation}
+\title{Artificial intelligence guided proteome-wide multiscale simulations}
 
 % A subtitle is optional and this may be deleted
 
 
-\author{Heng Ma \\ {\small Dan F. Smith Department of Chemical Engineering,\\ Lamar University, Beaumont, Texas}}
-
-\date{January 30$^{th}$, 2018}
+\author{Heng Ma}  
+%	\vspace{.5cm}{\small Oak Ridge National Laboratory\\ Oak Ridge, Tennessee 37830}}
+\institute{Oak Ridge National Laboratory\\ Oak Ridge, Tennessee 37830}
+\titlegraphic{
+	\includegraphics[width=2cm]{Pics/cmb_logo.png} \hspace{.2in}
+	\includegraphics[width=2cm]{Pics/ORNL.png} \hspace{.3in}
+	\includegraphics[width=1.cm]{Pics/LU.jpg}}
+\date{}
 
 
 \begin{document}
@@ -82,213 +87,92 @@
 % and table of contents.
 
 
-\section{Overviews of Biointerfacial Phenomena}
+\section{Overviews of Molecular Dynamics simulation }
 
 \subsection{Concept and Applications}
 
-\begin{frame}{What is Biointerface?}
-The region of contact between a biomolecule, cell, biological tissue or living organism or organic material considered living with another biomaterial or inorganic/organic material. 
-\begin{figure}
-\includegraphics[width=0.48\textwidth]{Pics/Prop.png}
-\hfill
-\includegraphics[width=0.48\textheight]{Pics/Ecoli.jpg}
-\end{figure}
-\end{frame}
-
-
-\begin{frame}{What can it be used for?}
-\begin{figure}
-\begin{columns}
-	\column{.6\textwidth}
-	\centering
-	\includegraphics[height=.35\textheight]{Pics/biofuel.png} 
-	\caption{{\scriptsize Bio-fuel cell} {\tiny (V. Coman et al. \emph{PCCP}, \textbf{2008}, 10, 6093.)}}
-	\vspace{.1cm}
-	%\caption{test2}
-	\includegraphics[height=.25\textheight]{Pics/water.png}
-	\caption{{\scriptsize Water remediation} {\tiny (N. Xafenias et al. \emph{Environ. Sci. Technol.} \textbf{2013}, 47, 4512.)}}
-	
-	\column{.5\textwidth}
-	\includegraphics[width=.9\linewidth]{Pics/foul.png}
-	\caption{{\scriptsize Anti-biofouling surface} {\tiny (G. Cheng et al. \emph{Biomaterials}, \textbf{2007}, 28, 4192.)
-}} 
-\end{columns}	
-\end{figure}
-\end{frame}
-
-\begin{frame}{Why molecular dynamics?}
-\begin{figure}
-	\includegraphics[width=\linewidth]{Pics/LYS.png}
-	\caption{Single molecular activity of lysozymn adsorption on graphene surface in atomstic resolution.   }
-\end{figure}
-\hfill {\tiny C.M. Nakano, H. Ma et al. \emph{Comp. Phys. Comm.} \textbf{2015}, 193, 1. }
-\end{frame}
-
-\section{Methods}
 \subsection{Molecular Dynamics (MD) simulation}
 \begin{frame}{Molecular Dynamics (MD) simulation}
 \centering
-	\begin{tikzpicture}[node distance=2cm]
-	\node (start) [startstop] {Initial State, t=0, run for T steps}; 
-	\node (pro1) [process, below of=start] {Compute Force: $F_{i}=-\frac{\partial E}{\partial \textbf{r}_i}$}; 
-	\node (pro2) [process, below of=pro1] {Update Configuration and Time Frame}; 
-	%\node (dec1) [decision, below of=pro2, yshift=-0.5cm] {Decision 1}; 
-	\node (out1) [io, below of=pro2] {Output (position, energy, ...)};	
-	\draw [arrow] (start) -- (pro1);
-	\draw [arrow] (pro1) -- (pro2);
-	\draw [arrow] (pro2) -- node[anchor=north]{$t<T$} ++(5,0) |- (pro1);
-	\draw [arrow] (pro2) -- node[anchor=west]{$t=T$} (out1);
-	\end{tikzpicture}
+\begin{tikzpicture}[node distance=2cm]
+\node (start) [startstop] {Initial State, t=0, run for T steps}; 
+\node (pro1) [process, below of=start] {Compute Force: $F_{i}=-\frac{\partial E}{\partial \textbf{r}_i}$}; 
+\node (pro2) [process, below of=pro1] {Update Configuration and Time Frame}; 
+%\node (dec1) [decision, below of=pro2, yshift=-0.5cm] {Decision 1}; 
+\node (out1) [io, below of=pro2] {Output (position, energy, ...)};	
+\draw [arrow] (start) -- (pro1);
+\draw [arrow] (pro1) -- (pro2);
+\draw [arrow] (pro2) -- node[anchor=north]{$t<T$} ++(5,0) |- (pro1);
+\draw [arrow] (pro2) -- node[anchor=west]{$t=T$} (out1);
+\end{tikzpicture}
 \end{frame}
 
 \begin{frame}{Calculating molecular interactions $E$}
-		Total energy can be calculated as
-	\begin{equation}
-		E_{total} = E_{bonded} + E_{nonbonded}, 
-	\end{equation}
-	\ which consists of bonded interactions, 
-	\begin{equation} 
-		E_{bonded} = E_{bonds} + E_{angles} + E_{dihedrals}, 
-	\end{equation}
-	\ and nonbonded interactions, 
-	\begin{equation}
-		E_{nonbonded} = E_{electrostatic} + E_{vdW}. 
-	\end{equation}
-	Update frame as 
-	\begin{equation}
-		r(t+1) = r(t) + v(t) dt + \frac{1}{2} a(t) dt^2
-	\end{equation}
+Total energy can be calculated as
+\begin{equation}
+E_{total} = E_{bonded} + E_{nonbonded}, 
+\end{equation}
+\ which consists of bonded interactions, 
+\begin{equation} 
+E_{bonded} = E_{bonds} + E_{angles} + E_{dihedrals}, 
+\end{equation}
+\ and nonbonded interactions, 
+\begin{equation}
+E_{nonbonded} = E_{electrostatic} + E_{vdW}. 
+\end{equation}
+Update frame as 
+\begin{equation}
+r(t+1) = r(t) + v(t) dt + \frac{1}{2} a(t) dt^2
+\end{equation}
 \end{frame}
+
+%\begin{frame}{An Example}
+%\begin{figure}
+%	\includegraphics[width=\linewidth]{Pics/LYS.png}
+%	\caption{Single molecular activity of lysozymn adsorption on graphene surface in atomstic resolution.   }
+%\end{figure}
+%\hfill {\tiny C.M. Nakano, H. Ma et al. \emph{Comp. Phys. Comm.} \textbf{2015}, 193, 1. }
+%\end{frame}
+
+
+\begin{frame}{Applications} 
+\begin{quote}
+	Everything that living things do can be reduced to wiggling and jiggling of atoms. 
+	\\ \hfill --Richard Feynman (1963)
+\end{quote}
+\vspace{-.5cm}
+\begin{figure}
+	\includegraphics[width=.9\linewidth]{Pics/scale_comm.jpg}
+%	\caption{MD scale}
+\end{figure}
+\end{frame}
+% Need to cover simulation scale and application on physiological (learning from the nature) 
+%, bioenergy, biomedical, and biosensing. 
 	
-\subsection{Free Energy Computation}
-\begin{frame}{Free Energy}
-To identify the thermodynamic favorability and spontaneousness of a given physical process, 
-\vspace{1cm}
-\begin{itemize}
-	\item 
-	Free Energy, 
-	\begin{equation}
-	G = H - TS. 
-	\end{equation}
-
-	\item Statistical Mechanics, 
-	\begin{equation}
-	G = - k_B T ln Q
-	\end{equation}
-\end{itemize}	
-
-\end{frame}
+%\subsection{Free Energy Computation}
+%\begin{frame}{Free Energy}
+%To identify the thermodynamic favorability and spontaneousness of a given physical process, 
+%\vspace{1cm}
+%\begin{itemize}
+%	\item 
+%	Free Energy, 
+%	\begin{equation}
+%	G = H - TS. 
+%	\end{equation}
+%
+%	\item Statistical Mechanics, 
+%	\begin{equation}
+%	G = - k_B T ln Q
+%	\end{equation}
+%\end{itemize}	
+%
+%\end{frame}
 
 
 
 
 
 \section{Research Projects}
-\subsection{Study of Passive Water Permeation through Lipid Bilayers} 
-\begin{frame}{Water permeation through lipid bilayers}
-\begin{columns}
-	\column{.4\linewidth}
-	\begin{figure}
-		\includegraphics[height=.8\textheight]{Pics/lipid_water}
-	\end{figure}
-	\column{.6\linewidth}
-	Two ways of water molecule passing through the membrane, 
-	\begin{enumerate}
-		\item Permeation through Aquaporin channel \\
-			Selective conduction
-		\item {\color{red} Passive diffusion} \\
-			Not completely understood\\
-			Driven by entropy \\
-			Responsible for cell swelling\\
-			(drug delivery application)
-	\end{enumerate}
-\end{columns}
-\end{frame}
-\begin{frame}{Lipid A and analogue}
-	Saccharo-lipid A from \emph{Escherichia Coli} can be used as drug deliver agent
-	\begin{figure}
-		\centering
-		\includegraphics[width=\linewidth]{Pics/Lipid_stru.png}
-		\caption{Molecular structures of Lipid A (left) and its analogue (right).}
-	\end{figure}
-	Depending on their numbers of acyl chains, Lipid A and the analogue were named as LP6 and LP4. \\
-	
-	\hfill {\tiny T. Wei, H. Ma et al. \emph{J. Phys. Chem. B.} \textbf{2014}, 118, 13202.
-}
-\end{frame}
-
-\begin{frame}
-\frametitle{System setup}
-\begin{columns}
-	\column{.4\linewidth}
-		\begin{figure}
-			\includegraphics[width=\columnwidth]{Pics/Lipid_setup.png}
-			\caption{Initial configuration of amphiphilic lipid system with water molecules and K$^+$ ions.}
-		\end{figure}
-	\column{.6\linewidth}
-		{\bf System setup:}
-		\begin{itemize}
-			\item Gromacs 4.5.5 and self-developed program for free energy computation
-			\item CHARMM36 force field parameters
-			\item tip3p water model
-			\item Parallel computing on HPC system
-		\end{itemize}
-\end{columns}
-\end{frame}
-
-\begin{frame}{MD simulation results (200ns)}
-	\begin{figure}
-		\centering
-		\includegraphics[width=\linewidth]{Pics/Lipid_dens.png} 
-		\caption{Snapshots of MD result (left) and density profile (right) according to the Z position of LP6 and LP4. }
-	\end{figure}
-	\begin{itemize}
-		\item LP6 exhibited a more orderly packed gel structure and LP4 in liquid-crystal phase.
-		\item No water molecule penetrated the membrane.  
-	\end{itemize}
-\end{frame}
-
-%\subsubsection{Cavity Insertion Widom (CIW) method}
-\begin{frame}[label=CIW]{Cavity Insertion Widom (CIW) method} 
-Calculate water permeation free energy through \hyperlink{CIWR}{lipid bilayers}
-\begin{columns}
-	\column{.35\textwidth}
-	\includegraphics[width=\linewidth]{Pics/CIW.png}
-	\column{.75\textwidth}
-	\begin{enumerate}
-		\item At relaxed system, one new water molecule was inserted in a cavity at certain $z$ position. 
-		\item The free energy at position $z$ can be obtained by 
-		\begin{equation}
-			\Delta G(z) = \mu_{ex}(z) - \mu_{ex}(z_0)
-		\end{equation}
-		where 
-		\begin{equation}
-			\tiny \mu_{ex}(z) = -RT ln\left\langle \frac{PV}{(N+3)RT} exp(\frac{-\Delta U(z)}{kT}) \right\rangle - RT ln\langle \rho_{cavity}(z) \rangle
-		\end{equation}
-		and $\mu_{ex}(z_0)$ is the reference potential in the water bulk. 
-		\item Repeat \textbf{1, 2} multiple time until moving on to another data point on z axis.  
-	\end{enumerate}		
-\end{columns}
-\end{frame}
-
-\begin{frame}[label=CIWR]{Free energy of passive water permeation}
-	%Calculated with \hyperlink{CIW}{CIW method}
-	\begin{figure}
-		\includegraphics[width=.65\linewidth]{Pics/Lipid_fe.png}
-		\caption{Free energy profile of passive water permeation through bilayers of LP6 and LP4. }
-	\end{figure}
-\vspace{-.3cm}
-	LP6 has a higher and broader barrier force for water permeation than LP4
-
-\end{frame}
-
-%\begin{frame}{Conclusions} 
-%	\begin{itemize}
-%		\item LP6 is more orderly packed due to more acyl chains in the bilayer interior.  
-%		\item LP6 has a higher barrier force as result of more packed gel structure.
-%	\end{itemize}
-%\end{frame}
-
 \subsection{Study of Protein Conduit on Electrode Surface}
 \begin{frame}{Decaheme Cytochrome MtrF protein } 
 	Originally from metal-reducing bacteria, \emph{Shewanella Oneidensis}. 
